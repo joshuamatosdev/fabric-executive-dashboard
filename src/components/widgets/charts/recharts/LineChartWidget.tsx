@@ -6,10 +6,10 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  ResponsiveContainer,
   Legend,
 } from 'recharts';
 import type { LineChartWidgetConfig } from '@/types/widget';
+import { SafeResponsiveContainer } from './SafeResponsiveContainer';
 
 // Mock data for development - includes actual/predicted, value, and value2 keys
 const MOCK_DATA = [
@@ -42,7 +42,7 @@ export function LineChartWidget({ config, data }: LineChartWidgetProps) {
   };
 
   return (
-    <ResponsiveContainer width="100%" height="100%" minWidth={0}>
+    <SafeResponsiveContainer>
       <LineChart data={chartData} margin={{ top: 5, right: 5, bottom: 5, left: 5 }}>
         {config.showGrid !== false && (
           <CartesianGrid strokeDasharray="3 3" stroke="#27272a" vertical={false} />
@@ -71,6 +71,6 @@ export function LineChartWidget({ config, data }: LineChartWidgetProps) {
           />
         ))}
       </LineChart>
-    </ResponsiveContainer>
+    </SafeResponsiveContainer>
   );
 }

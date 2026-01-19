@@ -6,12 +6,12 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  ResponsiveContainer,
   ReferenceLine,
   Legend,
 } from 'recharts';
 import { tokens } from '@fluentui/react-components';
 import type { BarChartWidgetConfig } from '@/types/widget';
+import { SafeResponsiveContainer } from './SafeResponsiveContainer';
 
 // Mock data for development
 const MOCK_DATA = [
@@ -46,7 +46,7 @@ export function BarChartWidget({ config, data }: BarChartWidgetProps) {
   };
 
   return (
-    <ResponsiveContainer width="100%" height="100%" minWidth={0}>
+    <SafeResponsiveContainer>
       <BarChart
         data={chartData}
         layout={config.orientation === 'horizontal' ? 'vertical' : 'horizontal'}
@@ -84,6 +84,6 @@ export function BarChartWidget({ config, data }: BarChartWidgetProps) {
           stackId={config.stacked ? 'stack' : undefined}
         />
       </BarChart>
-    </ResponsiveContainer>
+    </SafeResponsiveContainer>
   );
 }

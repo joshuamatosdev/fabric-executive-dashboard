@@ -8,10 +8,10 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  ResponsiveContainer,
   Legend,
 } from 'recharts';
 import type { ComposedChartWidgetConfig, ChartElement } from '@/types/widget';
+import { SafeResponsiveContainer } from './SafeResponsiveContainer';
 
 // Mock data for development
 const MOCK_DATA = [
@@ -88,7 +88,7 @@ export function ComposedChartWidget({ config, data }: ComposedChartWidgetProps) 
   };
 
   return (
-    <ResponsiveContainer width="100%" height="100%" minWidth={0}>
+    <SafeResponsiveContainer>
       <ComposedChart data={chartData} margin={{ top: 5, right: 5, bottom: 5, left: 5 }}>
         {config.showGrid !== false && (
           <CartesianGrid strokeDasharray="3 3" stroke="#27272a" vertical={false} />
@@ -105,6 +105,6 @@ export function ComposedChartWidget({ config, data }: ComposedChartWidgetProps) 
         {config.showLegend && <Legend />}
         {config.elements.map((element, index) => renderElement(element, index))}
       </ComposedChart>
-    </ResponsiveContainer>
+    </SafeResponsiveContainer>
   );
 }

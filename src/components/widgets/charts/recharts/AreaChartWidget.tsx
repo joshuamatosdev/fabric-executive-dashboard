@@ -6,10 +6,10 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  ResponsiveContainer,
   Legend,
 } from 'recharts';
 import type { AreaChartWidgetConfig } from '@/types/widget';
+import { SafeResponsiveContainer } from './SafeResponsiveContainer';
 
 // Mock data for development
 const MOCK_DATA = [
@@ -41,7 +41,7 @@ export function AreaChartWidget({ config, data }: AreaChartWidgetProps) {
   };
 
   return (
-    <ResponsiveContainer width="100%" height="100%" minWidth={0}>
+    <SafeResponsiveContainer>
       <AreaChart data={chartData} margin={{ top: 5, right: 5, bottom: 5, left: 5 }}>
         <defs>
           {config.series.map((series, index) => {
@@ -85,6 +85,6 @@ export function AreaChartWidget({ config, data }: AreaChartWidgetProps) {
           );
         })}
       </AreaChart>
-    </ResponsiveContainer>
+    </SafeResponsiveContainer>
   );
 }
