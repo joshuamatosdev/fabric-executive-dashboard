@@ -11,16 +11,16 @@ import {
 } from 'recharts';
 import type { LineChartWidgetConfig } from '@/types/widget';
 
-// Mock data for development
+// Mock data for development - includes actual/predicted, value, and value2 keys
 const MOCK_DATA = [
-  { name: 'Jan', actual: 400, predicted: null },
-  { name: 'Feb', actual: 450, predicted: null },
-  { name: 'Mar', actual: 420, predicted: null },
-  { name: 'Apr', actual: 480, predicted: null },
-  { name: 'May', actual: 510, predicted: null },
-  { name: 'Jun', actual: 540, predicted: 540 },
-  { name: 'Jul', actual: 500, predicted: 580 },
-  { name: 'Aug', actual: 460, predicted: 620 },
+  { name: 'Jan', actual: 400, predicted: null, value: 400, value2: 380 },
+  { name: 'Feb', actual: 450, predicted: null, value: 450, value2: 420 },
+  { name: 'Mar', actual: 420, predicted: null, value: 420, value2: 440 },
+  { name: 'Apr', actual: 480, predicted: null, value: 480, value2: 460 },
+  { name: 'May', actual: 510, predicted: null, value: 510, value2: 490 },
+  { name: 'Jun', actual: 540, predicted: 540, value: 540, value2: 520 },
+  { name: 'Jul', actual: 500, predicted: 580, value: 580, value2: 550 },
+  { name: 'Aug', actual: 460, predicted: 620, value: 620, value2: 600 },
 ];
 
 // Default colors for series

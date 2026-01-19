@@ -49,7 +49,7 @@ export interface KPIWidgetConfig extends BaseWidgetConfig {
   valueKey: string;
   previousValueKey?: string;
   changeKey?: string;
-  format?: 'number' | 'currency' | 'percent';
+  format?: 'number' | 'currency' | 'percent' | 'score';
   icon?: string;
   color?: string;
   trendLabel?: string;

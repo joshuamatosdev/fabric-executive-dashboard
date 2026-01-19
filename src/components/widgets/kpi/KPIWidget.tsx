@@ -59,11 +59,20 @@ interface KPIWidgetProps {
   data?: { value: number; previousValue?: number; change?: number };
 }
 
+// Mock data based on KPI title
+const MOCK_KPI_VALUES: Record<string, { value: number; previousValue: number; change: number }> = {
+  'Personnel Recruiting': { value: 1248, previousValue: 1109, change: 12.5 },
+  'Personnel Retention': { value: 94.2, previousValue: 96.3, change: -2.1 },
+  'Readiness Index': { value: 87, previousValue: 84.9, change: 2.4 },
+  'Earnings (YTD)': { value: 4200000, previousValue: 3863400, change: 8.7 },
+  'Operating Expenses': { value: 1800000, previousValue: 1821600, change: -1.2 },
+};
+
 export function KPIWidget({ config, data }: KPIWidgetProps) {
   const styles = useStyles();
 
-  // Use static mock data for now (will be replaced with data query)
-  const mockData = {
+  // Get mock data based on the title, or use default
+  const mockData = MOCK_KPI_VALUES[config.title] ?? {
     value: 1248,
     previousValue: 1109,
     change: 12.5,
@@ -85,6 +94,8 @@ export function KPIWidget({ config, data }: KPIWidgetProps) {
         }).format(val);
       case 'percent':
         return `${val.toFixed(1)}%`;
+      case 'score':
+        return `${Math.round(val)}/100`;
       default:
         return new Intl.NumberFormat('en-US').format(val);
     }

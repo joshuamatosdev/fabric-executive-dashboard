@@ -46,25 +46,34 @@ export const mockDashboardLayouts: Record<string, DashboardLayout> = {
       widgetId('widget-line-2'),
       widgetId('widget-line-3'),
       widgetId('widget-line-4'),
+      widgetId('widget-bar-5'),
+      widgetId('widget-bar-6'),
+      widgetId('widget-bar-7'),
+      widgetId('widget-line-5'),
     ],
     layouts: {
       lg: [
-        // KPI Row - 5 cards across
-        { i: 'widget-kpi-1', x: 0, y: 0, w: 2, h: 2, minW: 2, minH: 2 },
-        { i: 'widget-kpi-2', x: 2, y: 0, w: 2, h: 2, minW: 2, minH: 2 },
-        { i: 'widget-kpi-3', x: 4, y: 0, w: 2, h: 2, minW: 2, minH: 2 },
-        { i: 'widget-kpi-4', x: 6, y: 0, w: 2, h: 2, minW: 2, minH: 2 },
-        { i: 'widget-kpi-5', x: 8, y: 0, w: 2, h: 2, minW: 2, minH: 2 },
-        // Bar Chart Row - 4 charts
-        { i: 'widget-bar-1', x: 0, y: 2, w: 3, h: 4, minW: 2, minH: 3 },
-        { i: 'widget-bar-2', x: 3, y: 2, w: 3, h: 4, minW: 2, minH: 3 },
-        { i: 'widget-bar-3', x: 6, y: 2, w: 3, h: 4, minW: 2, minH: 3 },
-        { i: 'widget-bar-4', x: 9, y: 2, w: 3, h: 4, minW: 2, minH: 3 },
+        // KPI Row - 5 cards across (12 columns, so approx 2.4 each, round to fit)
+        { i: 'widget-kpi-1', x: 0, y: 0, w: 2, h: 2, minW: 2, minH: 1 },
+        { i: 'widget-kpi-2', x: 2, y: 0, w: 3, h: 2, minW: 2, minH: 1 },
+        { i: 'widget-kpi-3', x: 5, y: 0, w: 2, h: 2, minW: 2, minH: 1 },
+        { i: 'widget-kpi-4', x: 7, y: 0, w: 3, h: 2, minW: 2, minH: 1 },
+        { i: 'widget-kpi-5', x: 10, y: 0, w: 2, h: 2, minW: 2, minH: 1 },
+        // Bar Chart Row 1 - 4 charts
+        { i: 'widget-bar-1', x: 0, y: 2, w: 3, h: 3, minW: 2, minH: 2 },
+        { i: 'widget-bar-2', x: 3, y: 2, w: 3, h: 3, minW: 2, minH: 2 },
+        { i: 'widget-bar-3', x: 6, y: 2, w: 3, h: 3, minW: 2, minH: 2 },
+        { i: 'widget-bar-4', x: 9, y: 2, w: 3, h: 3, minW: 2, minH: 2 },
         // Line Chart Row - 4 charts
-        { i: 'widget-line-1', x: 0, y: 6, w: 3, h: 4, minW: 2, minH: 3 },
-        { i: 'widget-line-2', x: 3, y: 6, w: 3, h: 4, minW: 2, minH: 3 },
-        { i: 'widget-line-3', x: 6, y: 6, w: 3, h: 4, minW: 2, minH: 3 },
-        { i: 'widget-line-4', x: 9, y: 6, w: 3, h: 4, minW: 2, minH: 3 },
+        { i: 'widget-line-1', x: 0, y: 5, w: 3, h: 3, minW: 2, minH: 2 },
+        { i: 'widget-line-2', x: 3, y: 5, w: 3, h: 3, minW: 2, minH: 2 },
+        { i: 'widget-line-3', x: 6, y: 5, w: 3, h: 3, minW: 2, minH: 2 },
+        { i: 'widget-line-4', x: 9, y: 5, w: 3, h: 3, minW: 2, minH: 2 },
+        // Third Row - 4 more charts
+        { i: 'widget-bar-5', x: 0, y: 8, w: 3, h: 3, minW: 2, minH: 2 },
+        { i: 'widget-bar-6', x: 3, y: 8, w: 3, h: 3, minW: 2, minH: 2 },
+        { i: 'widget-bar-7', x: 6, y: 8, w: 3, h: 3, minW: 2, minH: 2 },
+        { i: 'widget-line-5', x: 9, y: 8, w: 3, h: 3, minW: 2, minH: 2 },
       ],
       md: [
         // KPI Row - 3 + 2 on md
