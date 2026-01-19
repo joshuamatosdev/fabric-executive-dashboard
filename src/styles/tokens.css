@@ -1,0 +1,7 @@
+:root {
+  --grid-gap: 16px;
+  --grid-row-height: 60px;
+  --grid-cols: 12;
+  --widget-border-radius: 8px;
+  --widget-padding: 12px;
+}

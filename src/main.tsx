@@ -5,6 +5,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { RouterProvider, createRouter } from '@tanstack/react-router';
 import { FluentProvider, webDarkTheme, webLightTheme } from '@fluentui/react-components';
 
+import './styles/tokens.css';
 import { queryClient } from './lib/query-client';
 import { routeTree } from './routeTree.gen';
 import { useUIStore } from './stores';

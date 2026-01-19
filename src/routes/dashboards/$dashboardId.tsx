@@ -92,14 +92,16 @@ const useStyles = makeStyles({
   },
   content: {
     flex: 1,
-    ...shorthands.overflow('auto'),
     display: 'flex',
     justifyContent: 'center',
+    minHeight: 0, // Critical for flex child to shrink properly
+    ...shorthands.overflow('hidden'),
   },
   contentInner: {
     width: '100%',
-    height: '100%',
     maxWidth: '1400px',
+    display: 'flex',
+    flexDirection: 'column',
     ...shorthands.padding('12px'),
     '@media (min-width: 768px)': {
       ...shorthands.padding('16px', '24px'),

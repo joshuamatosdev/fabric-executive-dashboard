@@ -23,11 +23,15 @@ const useStyles = makeStyles({
   container: {
     display: 'flex',
     width: '100%',
-    minHeight: '500px',
+    flex: 1,
+    minHeight: 0, // Critical for flex child sizing
     ...shorthands.gap('16px'),
   },
   main: {
     flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    minHeight: 0,
   },
   sidebar: {
     width: '280px',

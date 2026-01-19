@@ -14,7 +14,7 @@ const useStyles = makeStyles({
   container: {
     display: 'flex',
     alignItems: 'center',
-    height: '100%',
+    width: '100%',
     ...shorthands.gap('12px'),
     ...shorthands.overflow('hidden'),
   },

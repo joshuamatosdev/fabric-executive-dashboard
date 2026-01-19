@@ -8,8 +8,10 @@ import type { DashboardId } from '@/types/common';
 const useStyles = makeStyles({
   container: {
     width: '100%',
-    height: '100%',
-    minHeight: '500px',
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    minHeight: 0, // Critical for flex child sizing
   },
   loading: {
     display: 'flex',

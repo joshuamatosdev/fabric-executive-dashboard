@@ -19,10 +19,11 @@ const useStyles = makeStyles({
     color: tokens.colorPaletteRedForeground1,
     ...shorthands.gap('8px'),
   },
-  // KPI container - no header, max 50px height
+  // KPI container - fills grid cell, no header
   kpiContainer: {
     height: '100%',
-    maxHeight: '50px',
+    display: 'flex',
+    alignItems: 'center',
     backgroundColor: tokens.colorNeutralBackground2,
     ...shorthands.borderRadius('8px'),
     ...shorthands.border('1px', 'solid', tokens.colorNeutralStroke1),

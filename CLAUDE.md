@@ -56,6 +56,75 @@ All data is currently static mock data defined in `constants.tsx`. The dashboard
 ### Path Alias
 `@/*` maps to the project root directory (configured in vite.config.ts and tsconfig.json).
 
+## Critical Patterns
+
+### Always use Fluent UI makeStyles for styling
+```tsx
+import { makeStyles, tokens, shorthands } from '@fluentui/react-components';
+
+const useStyles = makeStyles({
+  container: {
+    display: 'flex',
+    ...shorthands.padding('8px', '12px'),
+    ...shorthands.borderRadius('8px'),
+    backgroundColor: tokens.colorNeutralBackground2,
+  },
+});
+```
+
+### Use tokens for colors, never hardcode
+```tsx
+// ✅ Correct
+color: tokens.colorNeutralForeground1
+backgroundColor: tokens.colorBrandBackground
+
+// ❌ Wrong
+color: '#ffffff'
+backgroundColor: '#0078d4'
+```
+
+### Use shorthands for multi-value CSS properties
+```tsx
+// ✅ Correct
+...shorthands.padding('8px', '12px')
+...shorthands.border('1px', 'solid', tokens.colorNeutralStroke1)
+...shorthands.borderRadius('8px')
+
+// ❌ Wrong - causes CSS-in-JS parsing errors
+padding: '8px 12px'
+border: '1px solid #ccc'
+```
+
+### Grid Layout uses 12-row system
+- KPI widgets: `h: 1` (1/12th of available height)
+- Chart widgets: `h: 3-4` (3/12th to 4/12th)
+- Use `MARGIN_Y` constant for consistent gaps (currently 16px)
+- `preventCollision={true}` - widgets cannot overlap
+- `compactType={null}` - widgets stay in fixed positions
+
+### Component Organization
+| Directory | Purpose |
+|-----------|---------|
+| `src/routes/` | TanStack Router file-based routes |
+| `src/components/layout/` | Grid, Sidebar, Toolbar |
+| `src/components/widgets/` | Widget components (KPI, charts) |
+| `src/components/common/` | Shared UI components |
+| `src/stores/` | Zustand state stores |
+| `src/api/` | TanStack Query hooks, MSW handlers |
+| `src/mocks/` | Mock data and MSW setup |
+
+### Widget Development Pattern
+1. Define widget config type in `src/types/widget.ts`
+2. Create widget component in `src/components/widgets/`
+3. Register in `WidgetRenderer.tsx`
+4. Add mock data in `src/mocks/data/widgets.ts`
+5. Add to dashboard layout in `src/mocks/data/dashboards.ts`
+
+### Flex Layout Rules
+- Always add `minHeight: 0` on flex children for proper sizing
+- Use `flex: 1` instead of `height: '100%'` in flex containers
+- This prevents overflow issues in nested flex layouts
+
 ## Environment Variables
 
 Set `GEMINI_API_KEY` in `.env.local` for API integration (currently using placeholder).
