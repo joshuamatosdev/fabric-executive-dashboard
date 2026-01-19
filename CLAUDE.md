@@ -15,7 +15,11 @@ npm run build    # Production build
 npm run preview  # Preview production build
 ```
 
-**Note:** No test or lint commands are configured.
+```bash
+npx tsc --noEmit      # Type checking
+npm run lint:fix      # Linting (ESLint + SonarLint)
+npm test              # Run ALL tests
+```
 
 ## Architecture
 
@@ -55,3 +59,57 @@ All data is currently static mock data defined in `constants.tsx`. The dashboard
 ## Environment Variables
 
 Set `GEMINI_API_KEY` in `.env.local` for API integration (currently using placeholder).
+
+## Testing Philosophy
+
+**Test the User Journey, Not Implementation Details**
+
+### The "Refactor Proof" Checklist
+
+Before finalizing a test, ask: "If I rename the component helper functions, does this test still pass?"
+
+- **YES** → Good Test
+- **NO** → Bad Test (needs rewriting)
+
+### Pattern Matcher
+
+| Do NOT Test | DO Test |
+|-------------|---------|
+| `spyOn(instance, '_privateMethod')` | `expect(publicAPI.result).toBe(x)` |
+| `expect(div).toHaveClass('bg-red')` | `expect(screen.getByRole('alert'))` |
+| `expect(useQuery).toHaveBeenCalled()` | `await screen.findByText('Data Loaded')` |
+| `fireEvent.click()` | `userEvent.click()` |
+
+### TDD Flow
+
+1. Write Failing Test
+2. Implement
+3. Refactor
+4. Delete `.agent-plan-*.json`
+
+### Verification Loop (Mandatory)
+
+After generating code, you must run all verification commands:
+
+```bash
+npx tsc --noEmit      # Type checking
+npm run lint:fix      # Linting (ESLint + SonarLint)
+npm test              # Run ALL tests
+```
+
+All three must pass before considering a task complete.
+
+### Key Principles
+
+- Test user behavior (`userEvent.click()`) not implementation (`fireEvent.click()`)
+- Query by accessibility roles (`getByRole('alert')`) not CSS classes (`toHaveClass('bg-red')`)
+- Assert on visible outcomes (`findByText('Data Loaded')`) not internal hooks (`useQuery.toHaveBeenCalled()`)
+- Tests should survive refactoring—if renaming internal functions breaks tests, those tests are too coupled
+
+### Testing Stack
+
+| Testing Layer | Tool | Purpose |
+|---------------|------|---------|
+| Unit & Logic | Vitest + React Testing Library | Speed. Native to Vite, 10x faster than Jest, shares vite.config.ts. Use for Zustand logic and simple UI components. |
+| Visual & DnD | Playwright | Physics. Drag-and-drop relies on real browser geometry (pixels, scroll positions). JSDOM fails at this. Playwright runs a real browser, making it the only reliable way to test react-grid-layout. |
+| API Mocking | MSW | Consistency. Works in both layers. Vitest uses it to test data logic; Playwright uses it to mock the Microsoft Fabric backend during E2E runs. |
