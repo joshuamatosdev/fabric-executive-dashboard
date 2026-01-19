@@ -118,6 +118,7 @@ interface WidgetContainerProps {
   isSelected?: boolean;
   onSettings?: () => void;
   onDelete?: () => void;
+  maxHeight?: string;
   children: React.ReactNode;
 }
 
@@ -128,6 +129,7 @@ export function WidgetContainer({
   isSelected = false,
   onSettings,
   onDelete,
+  maxHeight,
   children,
 }: WidgetContainerProps) {
   const styles = useStyles();
@@ -136,6 +138,8 @@ export function WidgetContainer({
     styles.container,
     isSelected && styles.selected
   );
+
+  const containerStyle = maxHeight ? { maxHeight } : undefined;
 
   const headerClass = mergeClasses(
     styles.header,
@@ -149,7 +153,7 @@ export function WidgetContainer({
   );
 
   return (
-    <div className={containerClass}>
+    <div className={containerClass} style={containerStyle}>
       <div className={headerClass}>
         {isEditing && (
           <div className={dragHandleClass}>

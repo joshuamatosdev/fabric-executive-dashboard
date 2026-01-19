@@ -92,6 +92,9 @@ export function WidgetRenderer({
     }
   };
 
+  // KPI widgets have a max height of 200px
+  const maxHeight = config.type === 'kpi' ? '200px' : undefined;
+
   return (
     <WidgetContainer
       title={config.title}
@@ -100,6 +103,7 @@ export function WidgetRenderer({
       isSelected={isSelected}
       onSettings={onSettings}
       onDelete={onDelete}
+      maxHeight={maxHeight}
     >
       <Suspense
         fallback={
