@@ -5,29 +5,66 @@ import { makeStyles, tokens, shorthands } from '@fluentui/react-components';
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
 
-// Grid configuration constants
-const TOTAL_GRID_ROWS = 12;
-const MARGIN_Y = 10; // Vertical margin between items
+// Grid configuration constants - 12 is standard because it's divisible by 2, 3, 4, and 6
+export const TOTAL_GRID_ROWS = 12;
+export const MARGIN_Y = 10; // Vertical spacing in pixels
 
-// Custom hook to get container dimensions
-function useContainerDimensions(ref: React.RefObject<HTMLElement | null>) {
+/**
+ * Helper function to convert fractions to grid units
+ * Example: toGridUnits(1, 6) = 2 (1/6th of 12 rows = 2 units)
+ *
+ * Common conversions:
+ * - 1/12 = h: 1
+ * - 1/6  = h: 2
+ * - 1/4  = h: 3
+ * - 1/3  = h: 4
+ * - 1/2  = h: 6
+ * - Full = h: 12
+ */
+export const toGridUnits = (numerator: number, denominator: number): number => {
+  const fraction = numerator / denominator;
+  return Math.round(fraction * TOTAL_GRID_ROWS);
+};
+
+// Custom hook to get window dimensions for responsive grid sizing
+function useWindowDimensions() {
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
 
   useEffect(() => {
-    const updateDimensions = () => {
+    const handleResize = () => {
+      setDimensions({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    };
+
+    // Initial measurement
+    handleResize();
+
+    // Listen for resize
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  return dimensions;
+}
+
+// Custom hook to get container width (for responsive breakpoints)
+function useContainerWidth(ref: React.RefObject<HTMLElement | null>) {
+  const [width, setWidth] = useState(0);
+
+  useEffect(() => {
+    const updateWidth = () => {
       if (ref.current) {
-        setDimensions({
-          width: ref.current.offsetWidth,
-          height: ref.current.offsetHeight,
-        });
+        setWidth(ref.current.offsetWidth);
       }
     };
 
     // Initial measurement
-    updateDimensions();
+    updateWidth();
 
     // Re-measure on resize
-    const resizeObserver = new ResizeObserver(updateDimensions);
+    const resizeObserver = new ResizeObserver(updateWidth);
     if (ref.current) {
       resizeObserver.observe(ref.current);
     }
@@ -37,7 +74,7 @@ function useContainerDimensions(ref: React.RefObject<HTMLElement | null>) {
     };
   }, [ref]);
 
-  return dimensions;
+  return width;
 }
 
 const useStyles = makeStyles({
@@ -77,17 +114,23 @@ const useStyles = makeStyles({
 const BREAKPOINTS = { lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 };
 const COLS = { lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 };
 
-// Dynamic row height calculation based on container height
-// Formula: (ContainerHeight - TotalMarginSpace) / TotalRows
-function calculateRowHeight(containerHeight: number, marginY: number): number {
-  if (containerHeight <= 0) return 50; // Fallback
+/**
+ * Dynamic row height calculation based on available height
+ * Formula: (AvailableHeight - TotalMarginSpace) / TotalRows
+ *
+ * We subtract (TOTAL_GRID_ROWS + 1) * MARGIN_Y to account for:
+ * - Gaps between rows (TOTAL_GRID_ROWS - 1 gaps)
+ * - Top and bottom padding (2 more margins)
+ */
+function calculateRowHeight(availableHeight: number, marginY: number): number {
+  if (availableHeight <= 0) return 50; // Fallback
 
-  // Account for margins between rows (TotalRows - 1 gaps)
-  const totalMarginSpace = (TOTAL_GRID_ROWS - 1) * marginY;
-  const calculatedHeight = (containerHeight - totalMarginSpace) / TOTAL_GRID_ROWS;
+  // Account for all margins: gaps between rows + top/bottom padding
+  const totalMarginSpace = (TOTAL_GRID_ROWS + 1) * marginY;
+  const calculatedHeight = (availableHeight - totalMarginSpace) / TOTAL_GRID_ROWS;
 
   // Ensure minimum row height for usability
-  return Math.max(calculatedHeight, 30);
+  return Math.max(calculatedHeight, 25);
 }
 
 // Dynamic margin based on viewport width
@@ -120,7 +163,8 @@ export function GridLayout({
 }: GridLayoutProps) {
   const styles = useStyles();
   const containerRef = useRef<HTMLDivElement>(null);
-  const { width, height } = useContainerDimensions(containerRef);
+  const containerWidth = useContainerWidth(containerRef);
+  const { height: windowHeight } = useWindowDimensions();
 
   // Memoize the layout and mark items as static when not editable
   const memoizedLayouts = useMemo(() => {
@@ -149,14 +193,19 @@ export function GridLayout({
   );
 
   const containerClass = `${styles.container} ${isEditable ? styles.editable : ''}`;
-  const margin = getMargin(width);
-  const rowHeight = calculateRowHeight(height, margin[1]);
+  const margin = getMargin(containerWidth);
+
+  // Calculate available height for the grid (accounting for header, pills section, etc.)
+  // The grid container typically has some offset from the top of the window
+  const containerOffset = containerRef.current?.getBoundingClientRect().top ?? 150;
+  const availableHeight = windowHeight - containerOffset;
+  const rowHeight = calculateRowHeight(availableHeight, margin[1]);
 
   return (
     <div className={containerClass} ref={containerRef}>
-      {width > 0 && (
+      {containerWidth > 0 && (
         <ResponsiveGridLayout
-          width={width}
+          width={containerWidth}
           layouts={memoizedLayouts}
           breakpoints={BREAKPOINTS}
           cols={COLS}
@@ -172,7 +221,9 @@ export function GridLayout({
           onResizeStop={onResizeStop}
           draggableHandle=".drag-handle"
           useCSSTransforms={true}
-          compactType="vertical"
+          // compactType={null} keeps items in fixed positions - they don't auto-compact
+          // This is better for strict dashboards where "Row 2" stays "Row 2"
+          compactType={null}
           preventCollision={false}
         >
           {children}
