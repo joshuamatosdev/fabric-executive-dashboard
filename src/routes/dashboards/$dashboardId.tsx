@@ -23,36 +23,82 @@ import {
 import { useDashboard, useDashboardLayout } from '@/api/queries';
 import { useDeleteDashboard } from '@/api/mutations';
 import { useEditorStore } from '@/stores';
+import { MetricPills } from '@/components/common/MetricPills';
 import type { DashboardId } from '@/types/common';
 
 const useStyles = makeStyles({
   container: {
     minHeight: '100vh',
+    maxHeight: '100vh',
     backgroundColor: tokens.colorNeutralBackground1,
     display: 'flex',
     flexDirection: 'column',
+    ...shorthands.overflow('hidden'),
   },
   header: {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    ...shorthands.padding('12px', '24px'),
+    ...shorthands.padding('8px', '16px'),
     ...shorthands.borderBottom('1px', 'solid', tokens.colorNeutralStroke1),
     backgroundColor: tokens.colorNeutralBackground2,
+    flexShrink: 0,
+    '@media (min-width: 768px)': {
+      ...shorthands.padding('12px', '24px'),
+    },
   },
   headerLeft: {
     display: 'flex',
     alignItems: 'center',
-    ...shorthands.gap('12px'),
+    ...shorthands.gap('8px'),
+    minWidth: 0,
+    flex: 1,
+    '@media (min-width: 768px)': {
+      ...shorthands.gap('12px'),
+    },
+  },
+  headerTitle: {
+    minWidth: 0,
+    ...shorthands.overflow('hidden'),
+  },
+  headerTitleText: {
+    fontSize: 'clamp(14px, 2vw, 20px)',
+    fontWeight: tokens.fontWeightBold,
+    ...shorthands.overflow('hidden'),
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+    display: 'block',
+  },
+  headerSubtitle: {
+    fontSize: 'clamp(10px, 1.5vw, 12px)',
+    color: tokens.colorNeutralForeground3,
+    ...shorthands.overflow('hidden'),
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+    display: 'block',
   },
   headerRight: {
     display: 'flex',
     alignItems: 'center',
-    ...shorthands.gap('8px'),
+    ...shorthands.gap('4px'),
+    flexShrink: 0,
+    '@media (min-width: 768px)': {
+      ...shorthands.gap('8px'),
+    },
   },
   content: {
     flex: 1,
-    ...shorthands.padding('16px', '24px'),
+    ...shorthands.overflow('auto'),
+    display: 'flex',
+    justifyContent: 'center',
+  },
+  contentInner: {
+    width: '100%',
+    maxWidth: '1400px',
+    ...shorthands.padding('12px'),
+    '@media (min-width: 768px)': {
+      ...shorthands.padding('16px', '24px'),
+    },
   },
   loading: {
     display: 'flex',
@@ -75,6 +121,18 @@ const useStyles = makeStyles({
     ...shorthands.borderRadius('4px'),
     fontSize: tokens.fontSizeBase200,
     fontWeight: tokens.fontWeightSemibold,
+  },
+  pillsSection: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    ...shorthands.padding('8px', '16px'),
+    ...shorthands.borderBottom('1px', 'solid', tokens.colorNeutralStroke1),
+    backgroundColor: tokens.colorNeutralBackground1,
+    flexShrink: 0,
+    '@media (min-width: 768px)': {
+      ...shorthands.padding('10px', '24px'),
+    },
   },
 });
 
@@ -150,22 +208,22 @@ function DashboardShell() {
       <header className={styles.header}>
         <div className={styles.headerLeft}>
           <Link to="/">
-            <Button appearance="subtle" icon={<ArrowLeft24Regular />} />
+            <Button appearance="subtle" icon={<ArrowLeft24Regular />} size="small" />
           </Link>
-          <div>
-            <Text size={500} weight="bold">
+          <div className={styles.headerTitle}>
+            <Text className={styles.headerTitleText}>
               {dashboard.name}
             </Text>
             {dashboard.description && (
-              <Text size={200} block style={{ color: tokens.colorNeutralForeground3 }}>
+              <Text className={styles.headerSubtitle}>
                 {dashboard.description}
               </Text>
             )}
           </div>
           {isEditMode && <span className={styles.editIndicator}>Edit Mode</span>}
           {hasUnsavedChanges && (
-            <span style={{ color: tokens.colorPaletteYellowForeground1, fontSize: '12px' }}>
-              (Unsaved changes)
+            <span style={{ color: tokens.colorPaletteYellowForeground1, fontSize: '10px' }}>
+              (Unsaved)
             </span>
           )}
         </div>
@@ -214,8 +272,14 @@ function DashboardShell() {
         </div>
       </header>
 
+      <section className={styles.pillsSection}>
+        <MetricPills />
+      </section>
+
       <main className={styles.content}>
-        <Outlet />
+        <div className={styles.contentInner}>
+          <Outlet />
+        </div>
       </main>
     </div>
   );

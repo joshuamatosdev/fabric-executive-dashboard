@@ -16,31 +16,49 @@ const useStyles = makeStyles({
     flexDirection: 'column',
     height: '100%',
     justifyContent: 'center',
+    ...shorthands.overflow('hidden'),
   },
   iconContainer: {
-    marginBottom: '8px',
+    marginBottom: 'clamp(4px, 0.5vh, 8px)',
+    '& svg': {
+      width: 'clamp(16px, 2vw, 24px)',
+      height: 'clamp(16px, 2vw, 24px)',
+    },
   },
   value: {
-    fontSize: '32px',
+    fontSize: 'clamp(20px, 3vw, 36px)',
     fontWeight: tokens.fontWeightBold,
-    lineHeight: 1.2,
+    lineHeight: 1.1,
     color: tokens.colorNeutralForeground1,
+    ...shorthands.overflow('hidden'),
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
   },
   trendContainer: {
     display: 'flex',
     alignItems: 'center',
-    ...shorthands.gap('4px'),
-    marginTop: '8px',
+    flexWrap: 'wrap',
+    ...shorthands.gap('2px'),
+    marginTop: 'clamp(4px, 0.5vh, 8px)',
+    '& svg': {
+      width: 'clamp(12px, 1.5vw, 16px)',
+      height: 'clamp(12px, 1.5vw, 16px)',
+    },
   },
   trendPositive: {
     color: tokens.colorPaletteGreenForeground1,
+    fontSize: 'clamp(10px, 1vw, 12px)',
   },
   trendNegative: {
     color: tokens.colorPaletteRedForeground1,
+    fontSize: 'clamp(10px, 1vw, 12px)',
   },
   trendLabel: {
     color: tokens.colorNeutralForeground3,
-    fontSize: tokens.fontSizeBase200,
+    fontSize: 'clamp(9px, 0.9vw, 11px)',
+    ...shorthands.overflow('hidden'),
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
   },
 });
 

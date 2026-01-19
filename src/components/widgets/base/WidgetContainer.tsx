@@ -16,12 +16,16 @@ import {
 const useStyles = makeStyles({
   container: {
     height: '100%',
+    maxHeight: '100%',
     display: 'flex',
     flexDirection: 'column',
     backgroundColor: tokens.colorNeutralBackground2,
-    ...shorthands.borderRadius('8px'),
+    ...shorthands.borderRadius('6px'),
     ...shorthands.border('1px', 'solid', tokens.colorNeutralStroke1),
     ...shorthands.overflow('hidden'),
+    '@media (min-width: 768px)': {
+      ...shorthands.borderRadius('8px'),
+    },
   },
   selected: {
     ...shorthands.border('2px', 'solid', tokens.colorBrandStroke1),
@@ -31,7 +35,11 @@ const useStyles = makeStyles({
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    ...shorthands.padding('12px', '12px', '8px', '12px'),
+    ...shorthands.padding('8px', '10px', '4px', '10px'),
+    flexShrink: 0,
+    '@media (min-width: 768px)': {
+      ...shorthands.padding('10px', '12px', '6px', '12px'),
+    },
   },
   headerEditable: {
     cursor: 'move',
@@ -39,12 +47,13 @@ const useStyles = makeStyles({
   titleContainer: {
     flex: 1,
     minWidth: 0,
+    ...shorthands.overflow('hidden'),
   },
   title: {
     display: 'block',
     fontWeight: tokens.fontWeightSemibold,
-    fontSize: tokens.fontSizeBase300,
-    lineHeight: tokens.lineHeightBase300,
+    fontSize: 'clamp(11px, 1.2vw, 14px)',
+    lineHeight: 1.3,
     color: tokens.colorNeutralForeground1,
     ...shorthands.overflow('hidden'),
     textOverflow: 'ellipsis',
@@ -52,16 +61,20 @@ const useStyles = makeStyles({
   },
   subtitle: {
     display: 'block',
-    fontSize: tokens.fontSizeBase200,
-    lineHeight: tokens.lineHeightBase200,
+    fontSize: 'clamp(9px, 1vw, 11px)',
+    lineHeight: 1.3,
     color: tokens.colorNeutralForeground3,
-    marginTop: '2px',
+    marginTop: '1px',
+    ...shorthands.overflow('hidden'),
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
   },
   actions: {
     display: 'flex',
     alignItems: 'center',
-    ...shorthands.gap('4px'),
-    marginLeft: '8px',
+    ...shorthands.gap('2px'),
+    marginLeft: '4px',
+    flexShrink: 0,
   },
   actionButton: {
     opacity: 0,
@@ -75,9 +88,12 @@ const useStyles = makeStyles({
   },
   content: {
     flex: 1,
-    ...shorthands.padding('0', '12px', '12px', '12px'),
+    ...shorthands.padding('0', '8px', '8px', '8px'),
     ...shorthands.overflow('hidden'),
     minHeight: 0,
+    '@media (min-width: 768px)': {
+      ...shorthands.padding('0', '10px', '10px', '10px'),
+    },
   },
   dragHandle: {
     cursor: 'grab',
@@ -85,6 +101,7 @@ const useStyles = makeStyles({
     transitionProperty: 'opacity',
     transitionDuration: '0.2s',
     color: tokens.colorNeutralForeground3,
+    flexShrink: 0,
     '&:active': {
       cursor: 'grabbing',
     },

@@ -64,11 +64,24 @@ const useStyles = makeStyles({
   },
 });
 
-// Breakpoints matching Tailwind's defaults
-const BREAKPOINTS = { lg: 1280, md: 1024, sm: 768, xs: 480, xxs: 0 };
+// Responsive breakpoints - optimized for common screen sizes
+const BREAKPOINTS = { lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 };
 const COLS = { lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 };
-const ROW_HEIGHT = 60;
-const MARGIN: [number, number] = [12, 12];
+
+// Dynamic row height calculation based on viewport
+function getRowHeight(containerWidth: number): number {
+  if (containerWidth >= 1200) return 50;
+  if (containerWidth >= 996) return 45;
+  if (containerWidth >= 768) return 40;
+  return 35;
+}
+
+// Dynamic margin based on viewport
+function getMargin(containerWidth: number): [number, number] {
+  if (containerWidth >= 1200) return [10, 10];
+  if (containerWidth >= 768) return [8, 8];
+  return [6, 6];
+}
 
 interface GridLayoutProps {
   layouts: Layouts;
@@ -109,6 +122,8 @@ export function GridLayout({
   );
 
   const containerClass = `${styles.container} ${isEditable ? styles.editable : ''}`;
+  const rowHeight = getRowHeight(width);
+  const margin = getMargin(width);
 
   return (
     <div className={containerClass} ref={containerRef}>
@@ -118,8 +133,8 @@ export function GridLayout({
           layouts={memoizedLayouts}
           breakpoints={BREAKPOINTS}
           cols={COLS}
-          rowHeight={ROW_HEIGHT}
-          margin={MARGIN}
+          rowHeight={rowHeight}
+          margin={margin}
           containerPadding={[0, 0]}
           isDraggable={isEditable}
           isResizable={isEditable}
