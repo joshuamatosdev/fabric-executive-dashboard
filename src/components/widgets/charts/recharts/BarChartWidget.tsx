@@ -46,7 +46,7 @@ export function BarChartWidget({ config, data }: BarChartWidgetProps) {
   };
 
   return (
-    <ResponsiveContainer width="100%" height="100%">
+    <ResponsiveContainer width="100%" height="100%" minWidth={0}>
       <BarChart
         data={chartData}
         layout={config.orientation === 'horizontal' ? 'vertical' : 'horizontal'}

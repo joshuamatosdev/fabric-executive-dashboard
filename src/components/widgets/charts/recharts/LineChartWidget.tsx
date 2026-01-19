@@ -42,7 +42,7 @@ export function LineChartWidget({ config, data }: LineChartWidgetProps) {
   };
 
   return (
-    <ResponsiveContainer width="100%" height="100%">
+    <ResponsiveContainer width="100%" height="100%" minWidth={0}>
       <LineChart data={chartData} margin={{ top: 5, right: 5, bottom: 5, left: 5 }}>
         {config.showGrid !== false && (
           <CartesianGrid strokeDasharray="3 3" stroke="#27272a" vertical={false} />

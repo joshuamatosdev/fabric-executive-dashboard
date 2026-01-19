@@ -81,11 +81,6 @@ const useStyles = makeStyles({
     transitionProperty: 'opacity',
     transitionDuration: '0.2s',
   },
-  containerHover: {
-    '&:hover $actionButton': {
-      opacity: 1,
-    },
-  },
   content: {
     flex: 1,
     ...shorthands.padding('0', '8px', '8px', '8px'),

@@ -88,7 +88,7 @@ export function ComposedChartWidget({ config, data }: ComposedChartWidgetProps) 
   };
 
   return (
-    <ResponsiveContainer width="100%" height="100%">
+    <ResponsiveContainer width="100%" height="100%" minWidth={0}>
       <ComposedChart data={chartData} margin={{ top: 5, right: 5, bottom: 5, left: 5 }}>
         {config.showGrid !== false && (
           <CartesianGrid strokeDasharray="3 3" stroke="#27272a" vertical={false} />
