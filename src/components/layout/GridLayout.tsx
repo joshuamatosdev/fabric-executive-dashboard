@@ -108,8 +108,21 @@ export function GridLayout({
   const containerRef = useRef<HTMLDivElement>(null);
   const width = useContainerWidth(containerRef);
 
-  // Memoize the layout to prevent unnecessary re-renders
-  const memoizedLayouts = useMemo(() => layouts, [layouts]);
+  // Memoize the layout and mark items as static when not editable
+  const memoizedLayouts = useMemo(() => {
+    if (isEditable) {
+      return layouts;
+    }
+    // When not editable, mark all items as static to prevent any dragging/resizing
+    const staticLayouts: Layouts = {};
+    for (const [breakpoint, layoutItems] of Object.entries(layouts)) {
+      staticLayouts[breakpoint] = layoutItems.map((item: Layout) => ({
+        ...item,
+        static: true,
+      }));
+    }
+    return staticLayouts;
+  }, [layouts, isEditable]);
 
   // Handle layout changes for all breakpoints
   const handleLayoutChange = useCallback(
