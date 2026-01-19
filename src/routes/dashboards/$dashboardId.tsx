@@ -10,6 +10,8 @@ import {
   ToolbarButton,
   ToolbarDivider,
   Tooltip,
+  Dropdown,
+  Option,
 } from '@fluentui/react-components';
 import {
   ArrowLeft24Regular,
@@ -19,6 +21,8 @@ import {
   ArrowRedo24Regular,
   Delete24Regular,
   Settings24Regular,
+  PlugConnected20Regular,
+  ArrowSync20Regular,
 } from '@fluentui/react-icons';
 import { useDashboard, useDashboardLayout } from '@/api/queries';
 import { useDeleteDashboard } from '@/api/mutations';
@@ -94,6 +98,7 @@ const useStyles = makeStyles({
   },
   contentInner: {
     width: '100%',
+    height: '100%',
     maxWidth: '1400px',
     ...shorthands.padding('12px'),
     '@media (min-width: 768px)': {
@@ -124,15 +129,44 @@ const useStyles = makeStyles({
   },
   pillsSection: {
     display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    ...shorthands.padding('8px', '16px'),
+    justifyContent: 'center',
     ...shorthands.borderBottom('1px', 'solid', tokens.colorNeutralStroke1),
     backgroundColor: tokens.colorNeutralBackground1,
     flexShrink: 0,
+  },
+  pillsInner: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    width: '100%',
+    maxWidth: '1400px',
+    ...shorthands.padding('8px', '12px'),
     '@media (min-width: 768px)': {
       ...shorthands.padding('10px', '24px'),
     },
+  },
+  pillsLeft: {
+    display: 'flex',
+    alignItems: 'center',
+    ...shorthands.gap('12px'),
+  },
+  pillsRight: {
+    display: 'flex',
+    alignItems: 'center',
+    ...shorthands.gap('16px'),
+  },
+  statusIndicator: {
+    display: 'flex',
+    alignItems: 'center',
+    ...shorthands.gap('4px'),
+    fontSize: '11px',
+    color: tokens.colorNeutralForeground3,
+  },
+  statusConnected: {
+    color: tokens.colorPaletteGreenForeground1,
+  },
+  dropdown: {
+    minWidth: '140px',
   },
 });
 
@@ -273,7 +307,34 @@ function DashboardShell() {
       </header>
 
       <section className={styles.pillsSection}>
-        <MetricPills />
+        <div className={styles.pillsInner}>
+          <div className={styles.pillsLeft}>
+            <Dropdown
+              className={styles.dropdown}
+              placeholder="Select Division"
+              defaultValue="All Divisions"
+              size="small"
+            >
+              <Option value="all">All Divisions</Option>
+              <Option value="engineering">Engineering</Option>
+              <Option value="sales">Sales</Option>
+              <Option value="marketing">Marketing</Option>
+              <Option value="product">Product</Option>
+              <Option value="hr">HR</Option>
+            </Dropdown>
+            <MetricPills />
+          </div>
+          <div className={styles.pillsRight}>
+            <div className={`${styles.statusIndicator} ${styles.statusConnected}`}>
+              <PlugConnected20Regular />
+              <span>API Connected</span>
+            </div>
+            <div className={styles.statusIndicator}>
+              <ArrowSync20Regular />
+              <span>Sync: 2m ago</span>
+            </div>
+          </div>
+        </div>
       </section>
 
       <main className={styles.content}>

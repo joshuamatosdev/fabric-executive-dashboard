@@ -78,17 +78,6 @@ describe('KPIWidget', () => {
     expect(screen.getByText('87/100')).toBeInTheDocument();
   });
 
-  it('displays trend label when provided', () => {
-    render(
-      <KPIWidget
-        config={{ ...baseConfig, trendLabel: 'vs last month' }}
-        data={{ value: 100, change: 10 }}
-      />
-    );
-
-    expect(screen.getByText('vs last month')).toBeInTheDocument();
-  });
-
   it('uses mock data when no data prop provided', () => {
     render(
       <KPIWidget

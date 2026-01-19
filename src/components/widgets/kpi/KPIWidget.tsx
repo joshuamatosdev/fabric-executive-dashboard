@@ -13,21 +13,16 @@ import type { KPIWidgetConfig } from '@/types/widget';
 const useStyles = makeStyles({
   container: {
     display: 'flex',
-    flexDirection: 'column',
+    alignItems: 'center',
     height: '100%',
-    justifyContent: 'space-between',
+    ...shorthands.gap('12px'),
     ...shorthands.overflow('hidden'),
-  },
-  topRow: {
-    display: 'flex',
-    alignItems: 'flex-start',
-    justifyContent: 'space-between',
-    marginBottom: '4px',
   },
   iconContainer: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    flexShrink: 0,
     ...shorthands.padding('6px'),
     ...shorthands.borderRadius('6px'),
     backgroundColor: tokens.colorNeutralBackground3,
@@ -36,31 +31,11 @@ const useStyles = makeStyles({
       height: '16px',
     },
   },
-  trendBadge: {
-    display: 'flex',
-    alignItems: 'center',
-    ...shorthands.gap('2px'),
-    '& svg': {
-      width: '10px',
-      height: '10px',
-      flexShrink: 0,
-    },
-  },
-  trendTextPositive: {
-    color: tokens.colorPaletteGreenForeground1,
-    fontSize: '10px',
-    fontWeight: tokens.fontWeightBold,
-    lineHeight: 1,
-  },
-  trendTextNegative: {
-    color: tokens.colorPaletteRedForeground1,
-    fontSize: '10px',
-    fontWeight: tokens.fontWeightBold,
-    lineHeight: 1,
-  },
-  bottomSection: {
+  content: {
     display: 'flex',
     flexDirection: 'column',
+    flex: 1,
+    minWidth: 0,
   },
   label: {
     fontSize: '9px',
@@ -68,23 +43,40 @@ const useStyles = makeStyles({
     textTransform: 'uppercase',
     letterSpacing: '0.05em',
     color: tokens.colorNeutralForeground3,
-    marginBottom: '2px',
     lineHeight: 1,
+    ...shorthands.overflow('hidden'),
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
   },
   value: {
-    fontSize: 'clamp(18px, 2.5vw, 24px)',
+    fontSize: '18px',
     fontWeight: tokens.fontWeightBold,
-    lineHeight: 1.1,
+    lineHeight: 1.2,
     color: tokens.colorNeutralForeground1,
     ...shorthands.overflow('hidden'),
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
   },
-  trendLabel: {
-    color: tokens.colorNeutralForeground4,
-    fontSize: '9px',
-    fontWeight: tokens.fontWeightMedium,
-    marginTop: '2px',
+  trendBadge: {
+    display: 'flex',
+    alignItems: 'center',
+    flexShrink: 0,
+    ...shorthands.gap('2px'),
+    '& svg': {
+      width: '12px',
+      height: '12px',
+    },
+  },
+  trendTextPositive: {
+    color: tokens.colorPaletteGreenForeground1,
+    fontSize: '11px',
+    fontWeight: tokens.fontWeightBold,
+    lineHeight: 1,
+  },
+  trendTextNegative: {
+    color: tokens.colorPaletteRedForeground1,
+    fontSize: '11px',
+    fontWeight: tokens.fontWeightBold,
     lineHeight: 1,
   },
 });
@@ -150,31 +142,27 @@ export function KPIWidget({ config, data }: KPIWidgetProps) {
 
   return (
     <div className={styles.container}>
-      {/* Top row: Icon on left, trend badge on right */}
-      <div className={styles.topRow}>
-        {IconComponent && (
-          <div className={styles.iconContainer}>
-            <IconComponent style={{ color: config.color ?? tokens.colorBrandForeground1 }} />
-          </div>
-        )}
-        <div className={styles.trendBadge}>
-          {isPositive ? (
-            <ArrowUpRight24Regular className={styles.trendTextPositive} />
-          ) : (
-            <ArrowDownRight24Regular className={styles.trendTextNegative} />
-          )}
-          <span className={isPositive ? styles.trendTextPositive : styles.trendTextNegative}>
-            {Math.abs(change).toFixed(1)}%
-          </span>
+      {/* Icon */}
+      {IconComponent && (
+        <div className={styles.iconContainer}>
+          <IconComponent style={{ color: config.color ?? tokens.colorBrandForeground1 }} />
         </div>
-      </div>
-      {/* Bottom section: label, value, trend label */}
-      <div className={styles.bottomSection}>
+      )}
+      {/* Content: label + value */}
+      <div className={styles.content}>
         <span className={styles.label}>{config.title}</span>
         <span className={styles.value}>{formatValue(displayData.value)}</span>
-        {config.trendLabel && (
-          <span className={styles.trendLabel}>{config.trendLabel}</span>
+      </div>
+      {/* Trend badge */}
+      <div className={styles.trendBadge}>
+        {isPositive ? (
+          <ArrowUpRight24Regular className={styles.trendTextPositive} />
+        ) : (
+          <ArrowDownRight24Regular className={styles.trendTextNegative} />
         )}
+        <span className={isPositive ? styles.trendTextPositive : styles.trendTextNegative}>
+          {Math.abs(change).toFixed(1)}%
+        </span>
       </div>
     </div>
   );

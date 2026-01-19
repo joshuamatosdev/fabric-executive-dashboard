@@ -8,6 +8,7 @@ import type { DashboardId } from '@/types/common';
 const useStyles = makeStyles({
   container: {
     width: '100%',
+    height: '100%',
     minHeight: '500px',
   },
   loading: {

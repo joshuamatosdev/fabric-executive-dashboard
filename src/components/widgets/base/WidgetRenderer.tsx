@@ -19,6 +19,16 @@ const useStyles = makeStyles({
     color: tokens.colorPaletteRedForeground1,
     ...shorthands.gap('8px'),
   },
+  // KPI container - no header, max 50px height
+  kpiContainer: {
+    height: '100%',
+    maxHeight: '50px',
+    backgroundColor: tokens.colorNeutralBackground2,
+    ...shorthands.borderRadius('8px'),
+    ...shorthands.border('1px', 'solid', tokens.colorNeutralStroke1),
+    ...shorthands.overflow('hidden'),
+    ...shorthands.padding('8px', '12px'),
+  },
 });
 
 // Lazy load widget components for better code splitting
@@ -92,9 +102,24 @@ export function WidgetRenderer({
     }
   };
 
-  // KPI widgets have a max height of 200px
-  const maxHeight = config.type === 'kpi' ? '200px' : undefined;
+  // KPI widgets use a simple container without header
+  if (config.type === 'kpi') {
+    return (
+      <div className={styles.kpiContainer}>
+        <Suspense
+          fallback={
+            <div className={styles.loading}>
+              <Spinner size="small" />
+            </div>
+          }
+        >
+          <KPIWidget config={config} />
+        </Suspense>
+      </div>
+    );
+  }
 
+  // Other widgets use WidgetContainer with header
   return (
     <WidgetContainer
       title={config.title}
@@ -103,7 +128,6 @@ export function WidgetRenderer({
       isSelected={isSelected}
       onSettings={onSettings}
       onDelete={onDelete}
-      maxHeight={maxHeight}
     >
       <Suspense
         fallback={
